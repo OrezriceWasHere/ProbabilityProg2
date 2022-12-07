@@ -1,7 +1,7 @@
 import sys
 from os.path import exists
 
-from data import input_data_factory
+from data import arguments_factory
 from tasks.init_task import InitTask
 
 LANGUAGE_VOCABULARY_SIZE = 300000
