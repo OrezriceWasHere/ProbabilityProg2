@@ -1,5 +1,7 @@
 from typing import Set
-from data.arguments_factory import ArgumentsDictionary
+
+from data import data_utils
+from data.arguments_dictionary import ArgumentsDictionary
 from data.items import *
 
 
@@ -18,7 +20,7 @@ class InputDatasets:
 
             dev_file = ArgumentsDictionary().get("dev_filename")
             self.dev_dataset = self.parser.build_input_cache(dev_file)
-            self.distinct_words_dev = self.distinct_words_of_list(self.dev_dataset)
+            self.distinct_words_dev = data_utils.distinct_words_of_list(self.dev_dataset)
 
             test_file = ArgumentsDictionary().get("test_filename")
             self.test_dataset = self.parser.build_input_cache(test_file)
@@ -32,13 +34,6 @@ class InputDatasets:
 
     def get_distinct_words_dev(self) -> Set[str]:
         return self.distinct_words_dev
-
-    def distinct_words_of_list(self, items: List[InputItem]):
-        distinct_words = set()
-        for item in items:
-            for word in item.words:
-                distinct_words.add(word)
-        return distinct_words
 
 
 class InputParser:

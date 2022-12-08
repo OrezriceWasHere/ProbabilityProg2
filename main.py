@@ -1,8 +1,9 @@
 import sys
 from os.path import exists
 
-from data.arguments_factory import ArgumentsDictionary
+from data.arguments_dictionary import ArgumentsDictionary
 from tasks.init_task import InitTask
+from tasks.lidstone_task import LidstoneTask
 from tasks.preprocessing_development_task import PreprocessingDevelopmentTask
 
 LANGUAGE_VOCABULARY_SIZE = 300000
@@ -13,7 +14,8 @@ def print_output():
 
     tasks = [
         InitTask(),
-        PreprocessingDevelopmentTask()
+        PreprocessingDevelopmentTask(),
+        LidstoneTask()
     ]
 
     output_number = 1

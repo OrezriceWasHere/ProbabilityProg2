@@ -1,7 +1,7 @@
 from typing import List
 
 from tasks.task import Task
-from data.arguments_factory import ArgumentsDictionary
+from data.arguments_dictionary import ArgumentsDictionary
 
 
 def calc_uniform_dist_of_a_word():
