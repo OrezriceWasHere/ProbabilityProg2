@@ -1,8 +1,9 @@
 import sys
 from os.path import exists
 
-from data import arguments_factory
+from data.arguments_factory import ArgumentsDictionary
 from tasks.init_task import InitTask
+from tasks.preprocessing_development_task import PreprocessingDevelopmentTask
 
 LANGUAGE_VOCABULARY_SIZE = 300000
 
@@ -11,7 +12,8 @@ def print_output():
     result = generate_header() + "\n"
 
     tasks = [
-        InitTask()
+        InitTask(),
+        PreprocessingDevelopmentTask()
     ]
 
     output_number = 1
@@ -25,7 +27,7 @@ def print_output():
 
 
 def initialize(**input_variables):
-    input_data_factory.get_instance().__init__(**input_variables)
+    ArgumentsDictionary().__init__(**input_variables)
 
 
 def main():
