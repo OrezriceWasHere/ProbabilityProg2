@@ -1,18 +1,18 @@
 from typing import List
 
 from tasks.task import Task
-from data import arguments_factory
+from data.arguments_factory import ArgumentsDictionary
 
 
 def calc_uniform_dist_of_a_word():
-    vocabulary_size = arguments_factory.get_instance()["language_vocabulary_size"]
+    vocabulary_size = ArgumentsDictionary()["language_vocabulary_size"]
     return 1 / vocabulary_size
 
 
 class InitTask(Task):
 
     def produce_output(self) -> List[str]:
-        input_dict = arguments_factory.get_instance()
+        input_dict = ArgumentsDictionary()
 
         return [
             input_dict["dev_filename"],
