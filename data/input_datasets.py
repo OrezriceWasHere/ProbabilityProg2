@@ -4,8 +4,8 @@ from data.items import *
 
 
 class InputDatasets:
-
     instance = None
+    initialized = False
 
     def __new__(cls):
         if cls.instance is None:
@@ -13,14 +13,16 @@ class InputDatasets:
         return cls.instance
 
     def __init__(self):
-        self.parser = InputParser()
+        if not InputDatasets.initialized:
+            self.parser = InputParser()
 
-        dev_file = ArgumentsDictionary().get("dev_filename")
-        self.dev_dataset = self.parser.build_input_cache(dev_file)
-        self.distinct_words_dev = self.distinct_words_of_list(self.dev_dataset)
+            dev_file = ArgumentsDictionary().get("dev_filename")
+            self.dev_dataset = self.parser.build_input_cache(dev_file)
+            self.distinct_words_dev = self.distinct_words_of_list(self.dev_dataset)
 
-        test_file = ArgumentsDictionary().get("test_filename")
-        self.test_dataset = self.parser.build_input_cache(test_file)
+            test_file = ArgumentsDictionary().get("test_filename")
+            self.test_dataset = self.parser.build_input_cache(test_file)
+        InputDatasets.initialized = True
 
     def get_development_set(self) -> List[InputItem]:
         return self.dev_dataset
