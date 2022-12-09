@@ -1,3 +1,4 @@
+from data import data_utils
 from tasks.task import Task
 from calculations import *
 
@@ -9,7 +10,6 @@ class LidstoneTask(Task):
     def __init__(self):
         self.train, self.validation = data_utils.split_development_data()
         self.input_word = ArgumentsDictionary()["word"]
-        self.train_word_count_dict = data_utils.count_word_appearances(self.train)
 
     def produce_output(self) -> List[str]:
 
@@ -20,23 +20,23 @@ class LidstoneTask(Task):
 
     def produce_count_output(self) -> list:
         return [
-            sum((len(item.words) for item in self.validation)),
-            sum((len(item.words) for item in self.train)),
-            len(self.train_word_count_dict.keys()),
-            self.train_word_count_dict.get(self.input_word) or 0
+            sum(self.validation.values()),
+            sum(self.train.values()),
+            len(self.train.keys()),
+            self.train.get(self.input_word) or 0
         ]
 
     def produce_probability_output(self) -> list:
         return [
-            calculate_lidstone_smoothing(self.input_word, self.train_word_count_dict, lamda=0.0),
-            calculate_lidstone_smoothing(UNSEEN_WORD, self.train_word_count_dict, lamda=0.0),
-            calculate_lidstone_smoothing(self.input_word, self.train_word_count_dict, lamda=0.1),
-            calculate_lidstone_smoothing(UNSEEN_WORD, self.train_word_count_dict, lamda=0.1),
+            calculate_lidstone_smoothing(self.input_word, self.train, lamda=0.0),
+            calculate_lidstone_smoothing(UNSEEN_WORD, self.train, lamda=0.0),
+            calculate_lidstone_smoothing(self.input_word, self.train, lamda=0.1),
+            calculate_lidstone_smoothing(UNSEEN_WORD, self.train, lamda=0.1),
         ]
 
     def produce_perplexity_output(self) -> list:
         lamdas_to_check = [0.01, 0.1, 1.0]
-        lamdas_proababilities_calculations = [unigram_probability_calculation(self.train_word_count_dict,
+        lamdas_proababilities_calculations = [unigram_probability_calculation(self.train,
                                                                               lamda=lamda)
                                               for lamda in lamdas_to_check]
         perplexities_calculations = [calculate_perplexity(probabilities)
