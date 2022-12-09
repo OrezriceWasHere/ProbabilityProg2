@@ -20,7 +20,6 @@ class InputDatasets:
 
             dev_file = ArgumentsDictionary().get("dev_filename")
             self.dev_dataset = self.parser.build_input_cache(dev_file)
-            self.distinct_words_dev = data_utils.distinct_words_of_list(self.dev_dataset)
 
             test_file = ArgumentsDictionary().get("test_filename")
             self.test_dataset = self.parser.build_input_cache(test_file)
@@ -31,9 +30,6 @@ class InputDatasets:
 
     def get_test_set(self) -> List[InputItem]:
         return self.test_dataset
-
-    def get_distinct_words_dev(self) -> Set[str]:
-        return self.distinct_words_dev
 
 
 class InputParser:
