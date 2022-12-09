@@ -20,27 +20,31 @@ class LidstoneTask(Task):
 
     def produce_count_output(self) -> list:
         return [
-            sum(self.validation.values()),
-            sum(self.train.values()),
-            len(self.train.keys()),
-            self.train.get(self.input_word) or 0
+            sum(self.validation.values()),  # Output8
+            sum(self.train.values()),  # Output9
+            len(self.train.keys()),  # Output10
+            self.train.get(self.input_word) or 0  # Output11
         ]
 
     def produce_probability_output(self) -> list:
         return [
-            calculate_lidstone_smoothing(self.input_word, self.train, lamda=0.0),
-            calculate_lidstone_smoothing(UNSEEN_WORD, self.train, lamda=0.0),
-            calculate_lidstone_smoothing(self.input_word, self.train, lamda=0.1),
-            calculate_lidstone_smoothing(UNSEEN_WORD, self.train, lamda=0.1),
+            calculate_lidstone_smoothing(self.input_word, self.train, lamda=0.0),  # Output12
+            calculate_lidstone_smoothing(UNSEEN_WORD, self.train, lamda=0.0),  # Output13
+            calculate_lidstone_smoothing(self.input_word, self.train, lamda=0.1),  # Output14
+            calculate_lidstone_smoothing(UNSEEN_WORD, self.train, lamda=0.1),  # Output1
         ]
 
     def produce_perplexity_output(self) -> list:
         lamdas_to_check = [0.01, 0.1, 1.0]
-        lamdas_proababilities_calculations = [unigram_probability_calculation(self.train,
-                                                                              lamda=lamda)
-                                              for lamda in lamdas_to_check]
-        perplexities_calculations = [calculate_perplexity(probabilities)
-                                     for probabilities in lamdas_proababilities_calculations]
+        # Word probabilities is a list where for each lamda
+        # there
+        word_probabilities = [[(count, calculate_lidstone_smoothing(word, self.train, lamda))
+                               for word, count in self.train.items()]
+                              for lamda in lamdas_to_check
+                              ]
+
+        perplexities_calculations = [calculate_perplexity_repetitive_items(word_probability)
+                                     for word_probability in word_probabilities]
 
         min_perplexity = min(perplexities_calculations)
         min_lamda = -1
