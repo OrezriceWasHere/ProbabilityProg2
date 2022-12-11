@@ -31,7 +31,7 @@ class LidstoneTask(Task):
             calculate_lidstone_smoothing(self.input_word, self.train, lamda=0.0),  # Output12
             calculate_lidstone_smoothing(UNSEEN_WORD, self.train, lamda=0.0),  # Output13
             calculate_lidstone_smoothing(self.input_word, self.train, lamda=0.1),  # Output14
-            calculate_lidstone_smoothing(UNSEEN_WORD, self.train, lamda=0.1),  # Output1
+            calculate_lidstone_smoothing(UNSEEN_WORD, self.train, lamda=0.1),  # Output15
         ]
 
     def produce_perplexity_output(self) -> list:
