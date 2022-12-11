@@ -50,8 +50,8 @@ class InputParser:
         return result
 
     def parse_item(self, buffer):
-        header = buffer[0].replace("<", "").replace(">", "").replace("\n", "").split("\t")
-        content = buffer[1].split(" ")
+        header = buffer[0].replace("<", "").replace(">", "").rstrip().split("\t")
+        content = buffer[1].rstrip().split(" ")
         source, idd, topics = header[0], header[1], header[2:]
         return InputItem(
             SourceItem(source),
