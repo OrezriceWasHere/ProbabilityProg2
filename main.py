@@ -4,6 +4,8 @@ from os.path import exists
 from data.arguments_dictionary import ArgumentsDictionary
 from tasks.init_task import InitTask
 from tasks.lidstone_task import LidstoneTask
+from tasks.heldout_task import HeldoutTask
+from tasks.evaluation_task import EvaluationTask
 from tasks.preprocessing_development_task import PreprocessingDevelopmentTask
 
 LANGUAGE_VOCABULARY_SIZE = 300000
@@ -12,10 +14,16 @@ LANGUAGE_VOCABULARY_SIZE = 300000
 def print_output():
     result = generate_header() + "\n"
 
+    lidstone_task = LidstoneTask()
+    heldout_task = HeldoutTask()
+    evaluation_task = EvaluationTask(lidstone_task, heldout_task)
+
     tasks = [
         InitTask(),
         PreprocessingDevelopmentTask(),
-        LidstoneTask()
+        lidstone_task,
+        heldout_task,
+        evaluation_task
     ]
 
     output_number = 1

@@ -27,6 +27,12 @@ def distinct_words_of_list(items: List[InputItem]) -> Set[str]:
     return set(count_word_appearances(items).keys())
 
 
+def get_test_data():
+    test_set = InputDatasets().get_test_set()
+    all_words = get_words_by_input_items(test_set)
+    return count_word_appearances(all_words)
+
+
 def split_development_data(split_ratio=0.9) -> Tuple[Dict[str, int], Dict[str, int]]:
     dev_set = InputDatasets().get_development_set()
     all_words = get_words_by_input_items(dev_set)
