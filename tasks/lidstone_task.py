@@ -38,6 +38,8 @@ class LidstoneTask(Task):
         lamdas_to_check = [0.01, 0.1, 1.0]
         # Word probabilities is a list where for each lamda
         # there
+
+        # TODO: we probably want to use self.validation.items()
         word_probabilities = [[(count, calculate_lidstone_smoothing(word, self.train, lamda))
                                for word, count in self.train.items()]
                               for lamda in lamdas_to_check
@@ -45,6 +47,8 @@ class LidstoneTask(Task):
 
         perplexities_calculations = [calculate_perplexity_repetitive_items(word_probability)
                                      for word_probability in word_probabilities]
+
+        # TODO: (from the exercise document) "Your program should check the range of different values for λ between 0 and 2, and choose the one that minimizes the perplexity on the validation set. λ values should be specified up to two digits after the decimal point"
 
         min_perplexity = min(perplexities_calculations)
         min_lamda = -1

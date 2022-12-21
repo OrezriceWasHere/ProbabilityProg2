@@ -58,7 +58,7 @@ def main():
 
 
 def generate_header():
-    names = ["Or Shachar", "Yonatan ???"]
+    names = ["Or Shachar", "Jonathan Shaki"]
     ids = ["123456789", "???"]
     return f"#Students\t{' '.join(names)}\t{' '.join(ids)}"
 

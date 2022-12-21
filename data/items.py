@@ -3,6 +3,7 @@ from enum import Enum
 from dataclasses import dataclass
 
 
+# TODO: I think the code should be able to run with any given files, including a different topic file
 @dataclass
 class TopicItem(str, Enum):
     ACK = "acq"
