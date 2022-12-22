@@ -39,9 +39,12 @@ class HeldoutTask(Task):
         return self.get_expected_probability(self.train.get(word) or 0)
 
     def get_occurrences_in_heldout(self, r):
-        return sum(self.heldout.get(key) or 0 for key in self.train if self.train[key] == r)
+        return sum(self.heldout.get(key) for key in self.heldout if (self.train.get(key) or 0) == r)
 
     def get_number_of_words_with(self, r):
+        if r == 0:
+            return ArgumentsDictionary()["language_vocabulary_size"] - len(self.heldout)
+
         return len([key for key in self.train if self.train[key] == r])
 
     def get_expected_probability(self, r):

@@ -52,6 +52,7 @@ class LidstoneTask(Task):
                            for lambda_ in lambdas_to_check]
 
         min_perplexity = min(perplexities_calculations)
+
         min_lambda = -1
 
         for lambda_, perplexity in zip(lambdas_to_check, perplexities_calculations):

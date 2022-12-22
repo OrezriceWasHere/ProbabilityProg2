@@ -61,6 +61,5 @@ class InputParser:
         return InputItem(
             SourceItem(source),
             int(idd),
-            [TopicItem(item) for item in topics],
             content
         )

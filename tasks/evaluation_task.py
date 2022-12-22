@@ -23,9 +23,9 @@ class EvaluationTask(Task):
     def produce_perplexity_output(self) -> list:
         lidstone_perplexity = self.lidstone_task.calculate_perplexity(self.test, self.lidstone_task.best_lambda)
 
-        heldout_perplexity = self.heldout_task.calulate_perplexity(self.test)
+        heldout_perplexity = self.heldout_task.calculate_perplexity(self.test)
 
-        best = 'H' if heldout_perplexity >= lidstone_perplexity else 'L'
+        best = 'L' if lidstone_perplexity < heldout_perplexity else 'H'
 
         return [
             lidstone_perplexity,  # Output26
@@ -38,7 +38,7 @@ class EvaluationTask(Task):
 
         for i in range(10):
             result.append(
-                f'{self.lidstone_task.get_expected_frequency(i)}\t{self.heldout_task.get_expected_frequency(i)}\t' +
+                f'{round(self.lidstone_task.get_expected_frequency(i), 5)}\t{round(self.heldout_task.get_expected_frequency(i), 5)}\t' +
                 f'{self.heldout_task.get_number_of_words_with(i)}\t{self.heldout_task.get_occurrences_in_heldout(i)}')
 
         return result
