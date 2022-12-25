@@ -18,7 +18,7 @@ class EvaluationTask(Task):
                 self.produce_table_output()]
 
     def produce_count_output(self):
-        return [str(len(self.test))]  # output25
+        return [str(sum(self.test.values()))]  # output25
 
     def produce_perplexity_output(self) -> list:
         lidstone_perplexity = self.lidstone_task.calculate_perplexity(self.test, self.lidstone_task.best_lambda)
@@ -34,11 +34,10 @@ class EvaluationTask(Task):
         ]
 
     def produce_table_output(self) -> list:
-        result = []
+        result = ''
 
         for i in range(10):
-            result.append(
-                f'{round(self.lidstone_task.get_expected_frequency(i), 5)}\t{round(self.heldout_task.get_expected_frequency(i), 5)}\t' +
-                f'{self.heldout_task.get_number_of_words_with(i)}\t{self.heldout_task.get_occurrences_in_heldout(i)}')
+            result += f'{i}\t{round(self.lidstone_task.get_expected_frequency(i), 5)}\t{round(self.heldout_task.get_expected_frequency(i), 5)}\t' \
+                     + f'{self.heldout_task.get_number_of_words_with(i)}\t{self.heldout_task.get_occurrences_in_heldout(i)}\n'
 
-        return result
+        return [result]
