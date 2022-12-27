@@ -13,6 +13,9 @@ class HeldoutTask(Task):
         self.train, self.heldout = data_utils.split_development_data(0.5)
         self.input_word = ArgumentsDictionary()["word"]
 
+        self.events_in_train = sum(self.train.values())
+        self.events_in_heldout = sum(self.heldout.values())
+
     def produce_output(self) -> List[str]:
         return [str(value) for value in
                 self.produce_count_output() +
@@ -20,8 +23,8 @@ class HeldoutTask(Task):
 
     def produce_count_output(self) -> list:
         return [
-            sum(self.train.values()),  # Output21
-            sum(self.heldout.values()),  # Output22
+            self.events_in_train,  # Output21
+            self.events_in_heldout,  # Output22
         ]
 
     def produce_probability_output(self) -> list:
@@ -43,12 +46,12 @@ class HeldoutTask(Task):
 
     def get_number_of_words_with(self, r):
         if r == 0:
-            return ArgumentsDictionary()["language_vocabulary_size"] - len(self.heldout)
+            return ArgumentsDictionary()["language_vocabulary_size"] - len(self.train)
 
         return len([key for key in self.train if self.train[key] == r])
 
     def get_expected_probability(self, r):
-        return self.get_occurrences_in_heldout(r) / (self.get_number_of_words_with(r) * sum(self.heldout.values()))
+        return self.get_occurrences_in_heldout(r) / (self.get_number_of_words_with(r) * self.events_in_heldout)
 
     def get_expected_frequency(self, r):
-        return self.get_expected_probability(r) * (sum(self.train.values()) + sum(self.heldout.values()))
+        return self.get_expected_probability(r) * (self.events_in_train + self.events_in_heldout)

@@ -13,6 +13,9 @@ class LidstoneTask(Task):
         self.train, self.validation = data_utils.split_development_data()
         self.input_word = ArgumentsDictionary()["word"]
 
+        self.events_in_train = sum(self.train.values())
+        self.events_in_validation = sum(self.validation.values())
+
     def produce_output(self) -> List[str]:
 
         return [str(value) for value in
@@ -22,8 +25,8 @@ class LidstoneTask(Task):
 
     def produce_count_output(self) -> list:
         return [
-            sum(self.validation.values()),  # Output8
-            sum(self.train.values()),  # Output9
+            self.events_in_validation,  # Output8
+            self.events_in_train,  # Output9
             len(self.train.keys()),  # Output10
             self.train.get(self.input_word) or 0  # Output11
         ]
@@ -64,10 +67,10 @@ class LidstoneTask(Task):
         return output_16_to_17 + [min_lambda, min_perplexity]
 
     def get_probability(self, r, lambda_):
-        return (r + lambda_) / (lambda_ * ArgumentsDictionary()["language_vocabulary_size"] + sum(self.train.values()))
+        return (r + lambda_) / (lambda_ * ArgumentsDictionary()["language_vocabulary_size"] + self.events_in_train)
 
     def get_probability_of_word(self, word, lambda_):
         return self.get_probability(self.train.get(word) or 0, lambda_)
 
     def get_expected_frequency(self, r):
-        return self.get_probability(r, self.best_lambda) * (sum(self.train.values()) + sum(self.validation.values()))
+        return self.get_probability(r, self.best_lambda) * (self.events_in_train + self.events_in_validation)

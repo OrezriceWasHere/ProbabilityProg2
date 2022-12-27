@@ -34,7 +34,7 @@ class EvaluationTask(Task):
         ]
 
     def produce_table_output(self) -> list:
-        result = ''
+        result = '\n'
 
         for i in range(10):
             result += f'{i}\t{round(self.lidstone_task.get_expected_frequency(i), 5)}\t{round(self.heldout_task.get_expected_frequency(i), 5)}\t' \
