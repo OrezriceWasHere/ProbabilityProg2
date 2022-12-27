@@ -21,6 +21,8 @@ class EvaluationTask(Task):
         return [str(sum(self.test.values()))]  # output25
 
     def produce_perplexity_output(self) -> list:
+        """Calculate the perplexity outputs of lidstone and heldout with the test dataset"""
+
         lidstone_perplexity = self.lidstone_task.calculate_perplexity(self.test, self.lidstone_task.best_lambda)
 
         heldout_perplexity = self.heldout_task.calculate_perplexity(self.test)

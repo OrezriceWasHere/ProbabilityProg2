@@ -11,7 +11,9 @@ from tasks.preprocessing_development_task import PreprocessingDevelopmentTask
 LANGUAGE_VOCABULARY_SIZE = 300000
 
 
-def print_output():
+def get_output():
+    """returns the output of the whole program"""
+
     result = generate_header() + "\n"
 
     lidstone_task = LidstoneTask()
@@ -33,7 +35,7 @@ def print_output():
             result += f'#Output{output_number}\t{str(output)}\n'
             output_number += 1
 
-    print(result)
+    return result
 
 
 def initialize(**input_variables):
@@ -41,6 +43,8 @@ def initialize(**input_variables):
 
 
 def main():
+    """process the command line and write the output to the appropriate file"""
+
     argv = sys.argv
     if len(argv) < 5:
         raise Exception("Not enough arguments to unpack. Expecting: "
@@ -62,12 +66,14 @@ def main():
                word=word,
                out_filename=out_filename,
                language_vocabulary_size=LANGUAGE_VOCABULARY_SIZE)
-    print_output()
+
+    with open(out_filename, 'w') as file:
+        file.write(get_output())
 
 
 def generate_header():
     names = ["Or Shachar", "Jonathan Shaki"]
-    ids = ["123456789", "???"]
+    ids = ["209493709", "204920367"]
     return f"#Students\t{' '.join(names)}\t{' '.join(ids)}"
 
 

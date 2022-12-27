@@ -42,16 +42,20 @@ class HeldoutTask(Task):
         return self.get_expected_probability(self.train.get(word) or 0)
 
     def get_occurrences_in_heldout(self, r):
+        """Calculate the number of occurrences in heldout of words with r occurrences in training set"""
+
         return sum(self.heldout.get(key) for key in self.heldout if (self.train.get(key) or 0) == r)
 
     def get_number_of_words_with(self, r):
         if r == 0:
-            return ArgumentsDictionary()["language_vocabulary_size"] - len(self.train)
+            return ArgumentsDictionary()["language_vocabulary_size"] - len(self.train) # the words we didn't see
 
         return len([key for key in self.train if self.train[key] == r])
 
     def get_expected_probability(self, r):
-        return self.get_occurrences_in_heldout(r) / (self.get_number_of_words_with(r) * self.events_in_heldout)
+        """return the expected probability of word with r occurrences"""
+        return self.get_occurrences_in_heldout(r) / (self.get_number_of_words_with(r) * self.events_in_heldout) # heldout smoothing
 
     def get_expected_frequency(self, r):
-        return self.get_expected_probability(r) * (self.events_in_train + self.events_in_heldout)
+        """the expected frequency of a word with r occurrences on dataset with the same size as the training set"""
+        return self.get_expected_probability(r) * self.events_in_train # expected frequency in the training set

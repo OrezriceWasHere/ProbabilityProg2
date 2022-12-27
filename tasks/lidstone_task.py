@@ -16,6 +16,8 @@ class LidstoneTask(Task):
         self.events_in_train = sum(self.train.values())
         self.events_in_validation = sum(self.validation.values())
 
+        self.best_lambda = None # unknown yet
+
     def produce_output(self) -> List[str]:
 
         return [str(value) for value in
@@ -49,7 +51,7 @@ class LidstoneTask(Task):
         output_16_to_17 = [self.calculate_perplexity(self.validation, lambda_)
                                      for lambda_ in lambdas_to_output]
 
-        lambdas_to_check = [i / 100 for i in range(201)]
+        lambdas_to_check = [i / 100 for i in range(201)] # each number between 0 and 2, with 2-digits-after-decimal point precision
 
         perplexities_calculations = [self.calculate_perplexity(self.validation, lambda_)
                            for lambda_ in lambdas_to_check]
@@ -58,7 +60,7 @@ class LidstoneTask(Task):
 
         min_lambda = -1
 
-        for lambda_, perplexity in zip(lambdas_to_check, perplexities_calculations):
+        for lambda_, perplexity in zip(lambdas_to_check, perplexities_calculations): # searching for the lambda of the min perplexity
             if perplexity == min_perplexity:
                 min_lambda = lambda_
 
@@ -67,10 +69,15 @@ class LidstoneTask(Task):
         return output_16_to_17 + [min_lambda, min_perplexity]
 
     def get_probability(self, r, lambda_):
+        """Calculate the probability of word with r occurrences, given lambda"""
+
+        # calculate lidstone smoothing
         return (r + lambda_) / (lambda_ * ArgumentsDictionary()["language_vocabulary_size"] + self.events_in_train)
 
     def get_probability_of_word(self, word, lambda_):
         return self.get_probability(self.train.get(word) or 0, lambda_)
 
     def get_expected_frequency(self, r):
-        return self.get_probability(r, self.best_lambda) * (self.events_in_train + self.events_in_validation)
+        """Get the expected frequency of word with r occurrences (uses the best lambda found)"""
+
+        return self.get_probability(r, self.best_lambda) * self.events_in_train # expected frequency in the training set
