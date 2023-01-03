@@ -1,3 +1,5 @@
+# Jonathan Shaki, Or Shachar 204920367, 209493709
+
 from typing import Set
 
 from data import data_utils
@@ -23,7 +25,8 @@ class InputDatasets:
 
             test_file = ArgumentsDictionary().get("test_filename")
             self.test_dataset = self.parser.build_input_cache(test_file)
-        InputDatasets.initialized = True
+
+            InputDatasets.initialized = True
 
     def get_development_set(self) -> List[InputItem]:
         return self.dev_dataset
@@ -36,8 +39,10 @@ class InputParser:
 
     def build_input_cache(self, filename: str) -> List[InputItem]:
         result = []
-        buffer = []
+
         with open(filename) as file:
+            buffer = []
+
             for line in file:
                 if line == "\n":
                     continue
@@ -47,15 +52,16 @@ class InputParser:
                     item = self.parse_item(buffer)
                     buffer.clear()
                     result.append(item)
+
         return result
 
     def parse_item(self, buffer):
         header = buffer[0].replace("<", "").replace(">", "").rstrip().split("\t")
         content = buffer[1].rstrip().split(" ")
         source, idd, topics = header[0], header[1], header[2:]
+
         return InputItem(
             SourceItem(source),
             int(idd),
-            [TopicItem(item) for item in topics],
             content
         )

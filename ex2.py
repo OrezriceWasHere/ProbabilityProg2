@@ -1,21 +1,33 @@
+# Jonathan Shaki, Or Shachar 204920367, 209493709
+
 import sys
 from os.path import exists
 
 from data.arguments_dictionary import ArgumentsDictionary
 from tasks.init_task import InitTask
 from tasks.lidstone_task import LidstoneTask
+from tasks.heldout_task import HeldoutTask
+from tasks.evaluation_task import EvaluationTask
 from tasks.preprocessing_development_task import PreprocessingDevelopmentTask
 
 LANGUAGE_VOCABULARY_SIZE = 300000
 
 
-def print_output():
+def get_output():
+    """returns the output of the whole program"""
+
     result = generate_header() + "\n"
+
+    lidstone_task = LidstoneTask()
+    heldout_task = HeldoutTask()
+    evaluation_task = EvaluationTask(lidstone_task, heldout_task)
 
     tasks = [
         InitTask(),
         PreprocessingDevelopmentTask(),
-        LidstoneTask()
+        lidstone_task,
+        heldout_task,
+        evaluation_task
     ]
 
     output_number = 1
@@ -25,7 +37,7 @@ def print_output():
             result += f'#Output{output_number}\t{str(output)}\n'
             output_number += 1
 
-    print(result)
+    return result
 
 
 def initialize(**input_variables):
@@ -33,6 +45,8 @@ def initialize(**input_variables):
 
 
 def main():
+    """process the command line and write the output to the appropriate file"""
+
     argv = sys.argv
     if len(argv) < 5:
         raise Exception("Not enough arguments to unpack. Expecting: "
@@ -54,12 +68,14 @@ def main():
                word=word,
                out_filename=out_filename,
                language_vocabulary_size=LANGUAGE_VOCABULARY_SIZE)
-    print_output()
+
+    with open(out_filename, 'w') as file:
+        file.write(get_output())
 
 
 def generate_header():
-    names = ["Or Shachar", "Yonatan ???"]
-    ids = ["123456789", "???"]
+    names = ["Or Shachar", "Jonathan Shaki"]
+    ids = ["209493709", "204920367"]
     return f"#Students\t{' '.join(names)}\t{' '.join(ids)}"
 
 
